@@ -1,26 +1,18 @@
 package thaisa.vitoria.apptarefa
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 
 @Composable
-fun AppTarefas() {
+fun AppTarefas(
+    tarefaViewModel: TarefaViewModel = viewModel()
+) {
 
-    var tarefas by remember {
-        mutableStateOf(
-            listOf(
-                Tarefa(1, "Estudar Kotlin"),
-                Tarefa(2, "Praticar Compose")
-            )
-        )
-    }
+
 
     val navController = rememberNavController()
 
@@ -32,37 +24,27 @@ fun AppTarefas() {
         composable<Lista> {
 
             TelaLista(
-                tarefas = tarefas,
+                tarefas = tarefaViewModel.tarefas,
 
                 onNovaTarefa = {
                     navController.navigate(Cadastro)
                 },
 
-                onTarefaClick = { tarefa ->
+                onTarefaClick = { id ->
                     navController.navigate(
-                        Detalhes(tarefa.id)
+                        Detalhes(id)
                     )
                 },
 
-                onConcluir = { id ->
-
-                    tarefas = tarefas.map { tarefa ->
-
-                        if (tarefa.id == id) {
-                            tarefa.copy(
-                                concluida = !tarefa.concluida
-                            )
-                        } else {
-                            tarefa
-                        }
-                    }
+                onConcluida = { concluido, id ->
+                    tarefaViewModel.alternarConcluida(
+                        concluido,
+                        id
+                    )
                 },
 
-                onExcluir = { id ->
-
-                    tarefas = tarefas.filterNot {
-                        it.id == id
-                    }
+                onRemover = { id ->
+                    tarefaViewModel.removerTarefa(id)
                 }
             )
         }

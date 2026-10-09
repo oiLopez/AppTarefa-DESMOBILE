@@ -31,9 +31,9 @@ import androidx.compose.ui.unit.sp
 fun TelaLista(
     tarefas: List<Tarefa>,
     onNovaTarefa: () -> Unit,
-    onTarefaClick: (Tarefa) -> Unit,
-    onConcluir: (Int) -> Unit,
-    onExcluir: (Int) -> Unit
+    onTarefaClick: (Int) -> Unit,
+    onConcluida: (Boolean, Int) -> Unit,
+    onRemover: (Int) -> Unit
 ) {
 
     val roxo = Color(0xFF7E64B8)
@@ -91,8 +91,8 @@ fun TelaLista(
 
                         Checkbox(
                             checked = tarefa.concluida,
-                            onCheckedChange = {
-                                onConcluir(tarefa.id)
+                            onCheckedChange = { concluido ->
+                                onConcluida(concluido, tarefa.id)
                             }
                         )
 
@@ -103,13 +103,13 @@ fun TelaLista(
                                 .weight(1f)
                                 .padding(start = 8.dp)
                                 .clickable {
-                                    onTarefaClick(tarefa)
+                                    onTarefaClick(tarefa.id)
                                 }
                         )
 
                         TextButton(
                             onClick = {
-                                onExcluir(tarefa.id)
+                                onRemover(tarefa.id)
                             }
                         ) {
                             Text(
