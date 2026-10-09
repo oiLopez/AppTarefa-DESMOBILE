@@ -52,16 +52,9 @@ fun AppTarefas(
         composable<Cadastro> {
 
             TelaCadastro(
-
                 onSalvar = { descricao ->
 
-                    val novoId =
-                        (tarefas.maxOfOrNull { it.id } ?: 0) + 1
-
-                    tarefas = tarefas + Tarefa(
-                        id = novoId,
-                        descricao = descricao
-                    )
+                    tarefaViewModel.adicionarTarefa(descricao)
 
                     navController.popBackStack()
                 },
@@ -74,13 +67,11 @@ fun AppTarefas(
 
         composable<Detalhes> { backStackEntry ->
 
-            val rota =
-                backStackEntry.toRoute<Detalhes>()
+            val rota = backStackEntry.toRoute<Detalhes>()
 
-            val tarefa =
-                tarefas.firstOrNull {
-                    it.id == rota.id
-                }
+            val tarefa = tarefaViewModel.buscarTarefa(
+                rota.id
+            )
 
             TelaDetalhes(
                 tarefa = tarefa,
