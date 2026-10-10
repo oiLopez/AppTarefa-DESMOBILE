@@ -57,9 +57,9 @@ fun TelaListaPreview() {
 
             onTarefaClick = { _ -> },
 
-            onConcluir = { _ -> },
+            onConcluida = { _, _ -> },
 
-            onExcluir = { _ -> }
+            onRemover = { _ -> }
         )
     }
 }
